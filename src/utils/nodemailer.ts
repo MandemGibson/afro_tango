@@ -59,7 +59,7 @@ export const sendOTPtoMail = async (otp: number, recipient: string) => {
       padding: 10px;
       border-radius: 4px;
       width: fit-content;
-      margin: 10px auto; /* This centers the OTP div */
+      margin: 10px auto; 
     }
     .footer {
       margin-top: 20px;
@@ -81,7 +81,7 @@ export const sendOTPtoMail = async (otp: number, recipient: string) => {
       <p>If you didn’t request a password reset, please ignore this email.</p>
     </div>
     <div class="footer">
-      <p>&copy; 2024 Your Company Name. All Rights Reserved.</p>
+      <p>&copy; 2024 Afro Tango. All Rights Reserved.</p>
     </div>
   </div>
 </body>
@@ -97,7 +97,7 @@ export const sendOTPtoMail = async (otp: number, recipient: string) => {
     });
 
     const mailOptions = {
-      from: "ADHD",
+      from: "Afro Tango",
       to: recipient,
       subject: "One Time Password",
       html: messageBody,

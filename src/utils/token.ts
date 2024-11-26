@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 export const generateToken = async (
   userId: string,
   res: Response,
-  rememberMe: boolean
+  /*remeberMe: boolean */
 ) => {
   try {
     const secretKey = process.env.JWT_SECRET_KEY;
@@ -21,14 +21,14 @@ export const generateToken = async (
       secure: process.env.NODE_ENV === "production"
     });
 
-    if (rememberMe) {
-      await res.cookie("jwt", token, {
-        httpOnly: true,
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-        sameSite: "strict",
-        secure: process.env.NODE_ENV === "production"
-      });
-    }
+    // if (rememberMe) {
+    //   await res.cookie("jwt", token, {
+    //     httpOnly: true,
+    //     maxAge: 7 * 24 * 60 * 60 * 1000,
+    //     sameSite: "strict",
+    //     secure: process.env.NODE_ENV === "production"
+    //   });
+    // }
 
     return token;
   } catch (error) {

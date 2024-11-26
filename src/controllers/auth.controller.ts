@@ -15,15 +15,13 @@ import {
 } from "../services/resetToken.service";
 import { sendOTPtoMail } from "../utils/nodemailer";
 
-//This is the login handler and it just gets the email, password and remember me
-//from the request body and sends the user's information
 export const loginHandler = async (
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<any> => {
   try {
-    const { email, password, rememberMe } = req.body;
+    const { email, password } = req.body;
     if (!email || !password) {
       return res
         .status(400)
@@ -37,23 +35,30 @@ export const loginHandler = async (
     }
 
     if (user) {
-      //Here we are just comparing the password from the request to the hashed password
-      //stored in the database.. you could check the utils folder
       const isPasswordCorrect = await validatePassword(password, user.password);
       if (!isPasswordCorrect) {
         return res.status(400).json({ message: "Invalid password" });
       }
 
-      //if there is a user and password is correct we generate a token so the
-      //frontend devs could use to keep the user logged in when the /me endpoint is fetched
-      await generateToken(user.id, res, rememberMe);
+      await generateToken(user.id, res);
 
       return res.status(200).json({
         message: "Login successful",
         id: user.id,
-        name: user.name,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        username: user.username,
+        gender: user.gender,
         email: user.email,
-        birthdate: user.birthdate,
+        bio: user.bio,
+        nationality: user.nationality,
+        profilePic: user.profilePic,
+        coverPic: user.coverPic,
+        websiteLink: user.websiteLink,
+        facebookLink: user.facebookLink,
+        instagramLink: user.instagramLink,
+        snapChatLink: user.snapChatLink,
+        whatsAppLink: user.whatsAppLink,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
       });
@@ -69,38 +74,12 @@ export const signupHandler = async (
   next: NextFunction
 ): Promise<any> => {
   try {
-    const {
-      email,
-      password,
-      confirmPassword,
-      name,
-      birthdate,
-      gender,
-      guardianName,
-      guardianEmail,
-      guardianPhone,
-      rememberMe,
-    } = req.body;
+    const { email, password } = req.body;
 
-    const userData = { email, password, name, birthdate, gender };
-    const guardianData = { guardianName, guardianEmail, guardianPhone };
+    const userData = { email, password };
 
-    if (
-      !email ||
-      !password ||
-      !confirmPassword ||
-      !name ||
-      !birthdate ||
-      !gender ||
-      !guardianName ||
-      !guardianEmail ||
-      !guardianPhone
-    ) {
+    if (!email || !password) {
       return res.status(400).json({ message: "Please fill in all fields" });
-    }
-
-    if (confirmPassword !== password) {
-      return res.status(400).json({ message: "Passwords do not match" });
     }
 
     const userByEmail = await getUserByEmail(email);
@@ -108,19 +87,11 @@ export const signupHandler = async (
       return res.status(409).json({ message: "Email already exists" });
     }
 
-    const user = await signupUser(userData, guardianData);
+    const user = await signupUser(userData);
 
-    await generateToken(user.id, res, rememberMe);
+    await generateToken(user.id, res);
 
-    res.status(201).json({
-      message: "User signed up successfully",
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      birthdate: user.birthdate,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
-    });
+    res.status(201).json({ message: "User signed up successfully" });
   } catch (error) {
     next(error);
   }
@@ -136,9 +107,20 @@ export const getMeHandler = async (
     if (!user) return res.status(404).json({ message: "User not found" });
     res.status(200).json({
       id: user.id,
-      name: user.name,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      username: user.username,
+      gender: user.gender,
       email: user.email,
-      birthdate: user.birthdate,
+      bio: user.bio,
+      nationality: user.nationality,
+      profilePic: user.profilePic,
+      coverPic: user.coverPic,
+      websiteLink: user.websiteLink,
+      facebookLink: user.facebookLink,
+      instagramLink: user.instagramLink,
+      snapChatLink: user.snapChatLink,
+      whatsAppLink: user.whatsAppLink,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
     });
@@ -178,6 +160,7 @@ export const forgotPasswordHandler = async (
     const otp = await createOTP(user.id);
     if (otp) await sendOTPtoMail(otp, email);
 
+    console.log(otp)
     res.status(200).json({ message: `OTP sent to ${email}` });
   } catch (error) {
     next(error);

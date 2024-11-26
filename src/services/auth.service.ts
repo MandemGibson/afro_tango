@@ -1,4 +1,4 @@
-import { Guardian, User } from "../entity";
+import { User } from "../entity";
 import { hashPassword } from "../utils/password";
 import { PrismaService } from "./prisma.service";
 const prisma = PrismaService;
@@ -43,26 +43,9 @@ export const loginUser = async (email: string) => {
   }
 };
 
-export const signupUser = async (userData: User, guardianData: Guardian) => {
+export const signupUser = async (userData: User) => {
   try {
-    const { email, password, name, birthdate, gender } = userData;
-    const { guardianName, guardianEmail, guardianPhone } = guardianData;
-
-    let guardian = await prisma.guardian.findUnique({
-      where: {
-        email: guardianEmail,
-      },
-    });
-
-    if (!guardian) {
-      guardian = await prisma.guardian.create({
-        data: {
-          name: guardianName,
-          email: guardianEmail,
-          phoneNumber: guardianPhone,
-        },
-      });
-    }
+    const { email, password } = userData;
 
     const hashedPassword = await hashPassword(password);
 
@@ -70,10 +53,6 @@ export const signupUser = async (userData: User, guardianData: Guardian) => {
       data: {
         email,
         password: hashedPassword,
-        name,
-        birthdate: new Date(birthdate),
-        gender,
-        guardianId: guardian.id,
       },
     });
 

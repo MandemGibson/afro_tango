@@ -7,95 +7,133 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Gender {
+  MALE
+  FEMALE
+}
+
 model User {
-  id            String        @id @default(cuid())
-  fullname      String
-  username      String     @unique
+  id            String    @id @default(cuid())
+  firstName     String?
+  otherName     String?
+  lastName      String?
+  username      String?   @unique
+  email         String    @unique
   password      String
   bio           String?
+  phoneNumber   String?
+  websiteLink   String?
+  facebookLink  String?
+  instagramLink String?
+  snapChatLink  String?
+  whatsAppLink  String?
   profilePic    String?
   coverPic      String?
-  connections User[] @relation("UserConnections")
-  connectedTo User[] @relation("UserConnections")
-  businesses    Business[]
-  reviews       Review[]
-  communities   Community[] @relation("CommunityMemberships")
-  events        Event[]
-  ads           Ad[]
+  gender        Gender?
+  nationality   String?
+  dob           DateTime?
 
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  connections User[]      @relation("UserConnections")
+  connectedTo User[]      @relation("UserConnections")
+  businesses  Business[]
+  reviews     Review[]
+  communities Community[] @relation("CommunityMemberships")
+  createdEvents      Event[] @relation("CreatedEvents")
+  registeredEvents Event[] @relation("RegisteredUsers")
+  ads         Ad[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Community {
-  id            String        @id @default(cuid())
-  name          String
-  category      String
-  about         String?
-  members       User[]      @relation("CommunityMemberships")
+  id             String  @id @default(cuid())
+  name           String
+  category       String
+  about          String?
+  members        User[]  @relation("CommunityMemberships")
   communityImage String?
 
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Event {
-  id            String        @id @default(cuid())
-  name          String
-  description   String?
-  category      String
-  date          DateTime
-  location      String
-  eventImage    String?
-  creator       User        @relation(fields: [creatorId], references: [id])
-  creatorId     String
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  category    String
+  date        DateTime
+  location    String
+  eventImage  String?
+  registered  User[] @relation("RegisteredUsers")
+  creator   User   @relation("CreatedEvents",fields: [creatorId], references: [id])
+  creatorId String
 
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Ad {
-  id            String        @id @default(cuid())
-  name          String
-  category      String
-  description   String
-  price         Float
-  adImage       String?
-  isBlocked     Boolean     @default(false)
-  owner         User        @relation(fields: [ownerId], references: [id])
-  ownerId       String
+  id          String  @id @default(cuid())
+  name        String
+  category    String
+  description String
+  price       Float
+  adImage     String?
+  isBlocked   Boolean @default(false)
+  owner       User    @relation(fields: [ownerId], references: [id])
+  ownerId     String
 
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Business {
-  id            String        @id @default(cuid())
-  name          String
-  category      String
-  address       String
-  email         String
-  mapLink       String?
+  id             String   @id @default(cuid())
+  name           String
+  category       String
+  address        String
+  email          String
+  mapLink        String?
   whatsappNumber String?
-  phoneNumber   String?
-  businessImage String?
-  owner         User        @relation(fields: [ownerId], references: [id])
-  ownerId       String
-  reviews       Review[]
+  phoneNumber    String?
+  businessImage  String?
+  owner          User     @relation(fields: [ownerId], references: [id])
+  ownerId        String
+  reviews        Review[]
 
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Review {
-  id            String        @id @default(cuid())
-  comment       String?
-  rating        Int
-  reviewer      User        @relation(fields: [reviewerId], references: [id])
-  reviewerId    String
-  business      Business    @relation(fields: [businessId], references: [id])
-  businessId    String
+  id         String   @id @default(cuid())
+  comment    String?
+  rating     Int
+  reviewer   User     @relation(fields: [reviewerId], references: [id])
+  reviewerId String
+  business   Business @relation(fields: [businessId], references: [id])
+  businessId String
 
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Otp {
+  id        String   @id @default(cuid())
+  otp       String
+  expiresIn DateTime
+  valid     Boolean  @default(true)
+  createdAt DateTime @default(now())
+  userId    String
+}
+
+model ResetToken {
+  id        String   @id @unique @default(uuid())
+  token     String
+  userId    String
+  valid     Boolean  @default(true)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
 }

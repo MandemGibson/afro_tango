@@ -1,18 +1,23 @@
-export type Guardian = {
-  id?: string;
-  guardianName: string;
-  guardianEmail: string;
-  guardianPhone: string;
-};
-
 export type User = {
-  id?: string;
-  name: string;
+  id?: string | undefined;
+  firstName?: string | null | undefined;
+  otherName?: string | null | undefined;
+  lastName?: string | null | undefined;
+  username?: string | null | undefined;
   email: string;
-  birthdate: Date;
-  gender: string;
   password: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-  guardianId?: string;
+  bio?: string | null | undefined;
+  phoneNumber?: string | null | undefined;
+  websiteLink?: string | null | undefined;
+  facebookLink?: string | null | undefined;
+  instagramLink?: string | null | undefined;
+  snapChatLink?: string | null | undefined;
+  whatsAppLink?: string | null | undefined;
+  profilePic?: string | null | undefined;
+  coverPic?: string | null | undefined;
+  gender?: string | null | undefined;
+  nationality?: string | null | undefined;
+  dob?: Date | null | undefined;
+  createdAt?: Date | null | undefined;
+  updatedAt?: Date | null | undefined;
 };

@@ -19,7 +19,7 @@ app.use("/api/v1", apiRouter);
 
 app.get("/", (_req, res) => {
   res.send(`<h1>Welcome</h1>
-    <p>You have hit the ADHD endpoint for Project 101</p>`);
+    <p>You have hit the Afro Tango endpoints</p>`);
 });
 
 app.listen(PORT, () => {

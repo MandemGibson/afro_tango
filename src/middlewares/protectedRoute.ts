@@ -19,6 +19,8 @@ export const protectedRoute = async (
 ): Promise<any> => {
   try {
     const token = await req.cookies.jwt;
+    console.log("Token: ",token);
+    
     
     if (!token) {
       return res.status(401).json({ message: "Unauthorized - No token found" });

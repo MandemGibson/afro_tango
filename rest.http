@@ -1,0 +1,55 @@
+###
+POST http://localhost:5000/api/v1/auth/signup
+Content-Type: application/json
+
+{
+    "email": "test1@io.com",
+    "password": "test1"
+}
+
+###
+//Login request
+POST http://localhost:5000/api/v1/auth/login
+Content-Type: application/json
+
+{
+    "email": "test1@io.com",
+    "password": "mandem1234"
+}
+
+###
+//Get me request
+GET http://localhost:5000/api/v1/auth/me
+
+###
+//Logout request
+POST http://localhost:5000/api/v1/auth/logout
+
+###
+//Forgot password/ request otp 
+POST http://localhost:5000/api/v1/auth/request-otp
+Content-Type: application/json
+
+{
+    "email": "test1@io.com"
+}
+
+###
+//Verify otp request
+POST http://localhost:5000/api/v1/auth/verify-otp
+Content-Type: application/json
+
+{
+    "otp": 2107
+}
+
+###
+//Reset password
+POST http://localhost:5000/api/v1/auth/reset-password
+Content-Type: application/json
+
+{
+    "token": "e256a1d952f07290adb5941201d63d49",
+    "newPassword": "mandem1234",
+    "confirmPassword": "mandem1234"
+}

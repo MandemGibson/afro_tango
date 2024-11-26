@@ -1,0 +1,101 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String        @id @default(cuid())
+  fullname      String
+  username      String     @unique
+  password      String
+  bio           String?
+  profilePic    String?
+  coverPic      String?
+  connections User[] @relation("UserConnections")
+  connectedTo User[] @relation("UserConnections")
+  businesses    Business[]
+  reviews       Review[]
+  communities   Community[] @relation("CommunityMemberships")
+  events        Event[]
+  ads           Ad[]
+
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Community {
+  id            String        @id @default(cuid())
+  name          String
+  category      String
+  about         String?
+  members       User[]      @relation("CommunityMemberships")
+  communityImage String?
+
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Event {
+  id            String        @id @default(cuid())
+  name          String
+  description   String?
+  category      String
+  date          DateTime
+  location      String
+  eventImage    String?
+  creator       User        @relation(fields: [creatorId], references: [id])
+  creatorId     String
+
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Ad {
+  id            String        @id @default(cuid())
+  name          String
+  category      String
+  description   String
+  price         Float
+  adImage       String?
+  isBlocked     Boolean     @default(false)
+  owner         User        @relation(fields: [ownerId], references: [id])
+  ownerId       String
+
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Business {
+  id            String        @id @default(cuid())
+  name          String
+  category      String
+  address       String
+  email         String
+  mapLink       String?
+  whatsappNumber String?
+  phoneNumber   String?
+  businessImage String?
+  owner         User        @relation(fields: [ownerId], references: [id])
+  ownerId       String
+  reviews       Review[]
+
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Review {
+  id            String        @id @default(cuid())
+  comment       String?
+  rating        Int
+  reviewer      User        @relation(fields: [reviewerId], references: [id])
+  reviewerId    String
+  business      Business    @relation(fields: [businessId], references: [id])
+  businessId    String
+
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}

@@ -21,3 +21,14 @@ export type User = {
   createdAt?: string | Date | undefined;
   updatedAt?: string | Date | undefined;
 };
+
+export type Ad = {
+  id?: string;
+  name: string;
+  category: string;
+  description: string;
+  price: number;
+  adImage: string;
+  isBlocked?: boolean;
+  ownerId: string;
+};

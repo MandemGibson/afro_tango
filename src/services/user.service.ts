@@ -29,6 +29,8 @@ export const getAllUsers = async (): Promise<User[]> => {
         dob: true,
         createdAt: true,
         updatedAt: true,
+
+        ads: true
       },
     });
   } catch (error) {

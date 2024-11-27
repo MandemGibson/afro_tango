@@ -115,6 +115,11 @@ model Review {
   updatedAt DateTime @updatedAt
 }
 
+model Category {
+  id   String   @id @default(cuid())
+  name String
+}
+
 model Otp {
   id        String   @id @default(cuid())
   otp       String

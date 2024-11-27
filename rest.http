@@ -89,3 +89,35 @@ Content-Type: application/json
 ###
 //Delete a user
 DELETE http://localhost:5000/api/v1/users/cm3yzn8c10000v0qzqrot11rd
+
+
+###
+//Create ad
+POST http://localhost:5000/api/v1/ads
+Content-Type: application/json
+
+{
+    "name": "Another Test Ad",
+    "description": "This is a test ad",
+    "price": 1000.00,
+    "category": "Electronics",
+    "adImage": "image2.jpg"
+}
+
+###
+//Get all ads
+GET http://localhost:5000/api/v1/ads
+
+###
+//Get one ad
+GET http://localhost:5000/api/v1/ads/cm400rp24000111z0zqhrlyqx
+
+###
+//Update ad
+PUT http://localhost:5000/api/v1/ads/cm400rp24000111z0zqhrlyqx
+Content-Type: application/json
+
+{
+    "price": 2500.00,
+    "isBlocked": true
+}

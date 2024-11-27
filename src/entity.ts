@@ -1,11 +1,11 @@
 export type User = {
-  id?: string | undefined;
+  id?: string;
   firstName?: string | null | undefined;
   otherName?: string | null | undefined;
   lastName?: string | null | undefined;
   username?: string | null | undefined;
   email: string;
-  password: string;
+  password?: string;
   bio?: string | null | undefined;
   phoneNumber?: string | null | undefined;
   websiteLink?: string | null | undefined;
@@ -18,6 +18,6 @@ export type User = {
   gender?: string | null | undefined;
   nationality?: string | null | undefined;
   dob?: Date | null | undefined;
-  createdAt?: Date | null | undefined;
-  updatedAt?: Date | null | undefined;
+  createdAt?: string | Date | undefined;
+  updatedAt?: string | Date | undefined;
 };

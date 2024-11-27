@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express";
 import {
-  getUserByEmail,
   loginUser,
   signupUser,
   updatePassword,
@@ -14,6 +13,7 @@ import {
   invalidateResetToken,
 } from "../services/resetToken.service";
 import { sendOTPtoMail } from "../utils/nodemailer";
+import { getUserByEmail } from "../services/user.service";
 
 export const loginHandler = async (
   req: Request,
@@ -35,32 +35,37 @@ export const loginHandler = async (
     }
 
     if (user) {
-      const isPasswordCorrect = await validatePassword(password, user.password);
+      const isPasswordCorrect = await validatePassword(
+        password,
+        user.password as string
+      );
       if (!isPasswordCorrect) {
         return res.status(400).json({ message: "Invalid password" });
       }
 
-      await generateToken(user.id, res);
+      await generateToken(user.id as string, res);
 
       return res.status(200).json({
         message: "Login successful",
-        id: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        username: user.username,
-        gender: user.gender,
-        email: user.email,
-        bio: user.bio,
-        nationality: user.nationality,
-        profilePic: user.profilePic,
-        coverPic: user.coverPic,
-        websiteLink: user.websiteLink,
-        facebookLink: user.facebookLink,
-        instagramLink: user.instagramLink,
-        snapChatLink: user.snapChatLink,
-        whatsAppLink: user.whatsAppLink,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
+        data: {
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          username: user.username,
+          gender: user.gender,
+          email: user.email,
+          bio: user.bio,
+          nationality: user.nationality,
+          profilePic: user.profilePic,
+          coverPic: user.coverPic,
+          websiteLink: user.websiteLink,
+          facebookLink: user.facebookLink,
+          instagramLink: user.instagramLink,
+          snapChatLink: user.snapChatLink,
+          whatsAppLink: user.whatsAppLink,
+          createdAt: user.createdAt,
+          updatedAt: user.updatedAt,
+        },
       });
     }
   } catch (error) {
@@ -89,7 +94,7 @@ export const signupHandler = async (
 
     const user = await signupUser(userData);
 
-    await generateToken(user.id, res);
+    // await generateToken(user.id as string, res);
 
     res.status(201).json({ message: "User signed up successfully" });
   } catch (error) {
@@ -106,23 +111,26 @@ export const getMeHandler = async (
     const user = req.user;
     if (!user) return res.status(404).json({ message: "User not found" });
     res.status(200).json({
-      id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      username: user.username,
-      gender: user.gender,
-      email: user.email,
-      bio: user.bio,
-      nationality: user.nationality,
-      profilePic: user.profilePic,
-      coverPic: user.coverPic,
-      websiteLink: user.websiteLink,
-      facebookLink: user.facebookLink,
-      instagramLink: user.instagramLink,
-      snapChatLink: user.snapChatLink,
-      whatsAppLink: user.whatsAppLink,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
+      message: "User found",
+      data: {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        username: user.username,
+        gender: user.gender,
+        email: user.email,
+        bio: user.bio,
+        nationality: user.nationality,
+        profilePic: user.profilePic,
+        coverPic: user.coverPic,
+        websiteLink: user.websiteLink,
+        facebookLink: user.facebookLink,
+        instagramLink: user.instagramLink,
+        snapChatLink: user.snapChatLink,
+        whatsAppLink: user.whatsAppLink,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+      },
     });
   } catch (error: any) {
     next(error);
@@ -157,10 +165,10 @@ export const forgotPasswordHandler = async (
         .json({ message: "No user associated with the provided email" });
     }
 
-    const otp = await createOTP(user.id);
+    const otp = await createOTP(user.id as string);
     if (otp) await sendOTPtoMail(otp, email);
 
-    console.log(otp)
+    console.log(otp);
     res.status(200).json({ message: `OTP sent to ${email}` });
   } catch (error) {
     next(error);

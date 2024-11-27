@@ -1,5 +1,5 @@
 import cookieparser from "cookie-parser";
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import morgan from "morgan";
 import { apiRouter } from "./routes/api.route";
 import { errorHandler } from "./middlewares/errorHandler";
@@ -13,7 +13,9 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(cookieparser());
-app.use(errorHandler);
+app.use((err: any, req: Request, res: Response, next: NextFunction) =>
+  errorHandler(err, req, res, next)
+);
 
 app.use("/api/v1", apiRouter);
 

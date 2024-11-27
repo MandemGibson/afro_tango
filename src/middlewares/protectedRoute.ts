@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { User } from "../entity";
 import { verifyToken } from "../utils/token";
 import { JwtPayload } from "jsonwebtoken";
-import { getAllUsers } from "../services/auth.service";
+import { getAllUsers } from "../services/user.service";
 
 declare global {
   namespace Express {

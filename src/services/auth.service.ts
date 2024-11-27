@@ -1,53 +1,28 @@
 import { User } from "../entity";
 import { hashPassword } from "../utils/password";
 import { PrismaService } from "./prisma.service";
+import { getUserByEmail } from "./user.service";
 const prisma = PrismaService;
 
-export const getAllUsers = async () => {
+export const loginUser = async (email: string): Promise<User | null> => {
   try {
-    const users = await prisma.user.findMany();
-    return users;
-  } catch (error) {
-    console.error(error);
-    throw new Error("Error getting all users");
-  }
-};
-
-export const getUserById = async (id: string) => {
-  try {
-    const user = await prisma.user.findUnique({ where: { id } });
-    return user;
-  } catch (error) {
-    console.error(error);
-    throw new Error("Error getting user by id");
-  }
-};
-
-export const getUserByEmail = async (email: string) => {
-  try {
-    const user = await prisma.user.findUnique({ where: { email } });
-    return user;
-  } catch (error) {
-    console.error(error);
-    throw new Error("Error getting user by email");
-  }
-};
-
-export const loginUser = async (email: string) => {
-  try {
-    const user = await getUserByEmail(email);
-    return user;
+    return await getUserByEmail(email);
   } catch (error) {
     console.error(error);
     throw new Error("Error in auth service: loginUser");
   }
 };
 
-export const signupUser = async (userData: User) => {
+export const signupUser = async (userData: User): Promise<User> => {
   try {
     const { email, password } = userData;
 
-    const hashedPassword = await hashPassword(password);
+    const hashedPassword = await hashPassword(password as string);
+
+    const existingUser = await prisma.user.findUnique({ where: { email } });
+    if (existingUser) {
+      throw new Error("Email already exists");
+    }
 
     const user = await prisma.user.create({
       data: {
@@ -63,14 +38,19 @@ export const signupUser = async (userData: User) => {
   }
 };
 
-export const updatePassword = async (userId: string, password: string) => {
+export const updatePassword = async (
+  userId: string,
+  password: string
+): Promise<User> => {
   try {
+    const hashedPassword = await hashPassword(password);
+
     return await prisma.user.update({
       where: {
         id: userId,
       },
       data: {
-        password,
+        password: hashedPassword,
       },
     });
   } catch (error) {

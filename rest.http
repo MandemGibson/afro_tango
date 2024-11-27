@@ -119,5 +119,46 @@ Content-Type: application/json
 
 {
     "price": 2500.00,
-    "isBlocked": true
+    "isBlocked": false
 }
+
+###
+//Delete ad
+DELETE http://localhost:5000/api/v1/ads/cm400rp24000111z0zqhrlyqx
+
+
+###
+//Create event
+POST http://localhost:5000/api/v1/events
+Content-Type: application/json
+
+{
+    "name": "Rover Fest",
+    "description": "This is a test event",
+    "category": "Entertainment",
+    "date": "2024-03-16",
+    "location": "Busia Beach",
+    "eventImage": "image.jpg"
+}
+
+###
+//Get all events
+GET http://localhost:5000/api/v1/events
+
+###
+//Get one event
+GET http://localhost:5000/api/v1/events/cm40fgjaq0001mz4jxq3ga212
+
+###
+//Update event
+PUT http://localhost:5000/api/v1/events/cm40fgjaq0001mz4jxq3ga212
+Content-Type: application/json
+
+{
+    "location": "Labadi Beach",
+    "date": "2025-01-10"
+}
+
+###
+//Delete event
+DELETE http://localhost:5000/api/v1/events/cm400rp24000111z0zqhrlyqx

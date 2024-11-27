@@ -32,3 +32,14 @@ export type Ad = {
   isBlocked?: boolean;
   ownerId: string;
 };
+
+export type Event = {
+  id?: string;
+  name: string;
+  description: string;
+  category: string;
+  date: string | Date;
+  location: string;
+  eventImage: string;
+  creatorId: string;
+};

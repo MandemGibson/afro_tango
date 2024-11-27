@@ -7,7 +7,7 @@ import {
 } from "../services/user.service";
 
 export const getAllUsersHandler = async (
-  req: Request,
+  _req: Request,
   res: Response,
   next: NextFunction
 ): Promise<any> => {

@@ -35,6 +35,9 @@ export const createEventHandler = async (
     };
 
     const newEvent = await createEvent(eventData);
+    if (!newEvent)
+      return res.status(500).json({ message: "Failed to create event" });
+
     res
       .status(201)
       .json({ message: "Event created successfully", data: newEvent });
@@ -86,6 +89,9 @@ export const updateEventHandler = async (
     const eventData = req.body;
     const updatedEvent = await updateEvent(id, eventData);
 
+    if (!updatedEvent)
+      return res.status(404).json({ message: "Event not found" });
+
     res
       .status(200)
       .json({ message: "Event updated successfully", data: updatedEvent });
@@ -101,7 +107,10 @@ export const deleteEventHandler = async (
 ): Promise<any> => {
   try {
     const { id } = req.params;
-    await deleteEvent(id);
+    const deletedEvent = await deleteEvent(id);
+
+    if (!deletedEvent)
+      return res.status(404).json({ message: "Event not found" });
 
     res.status(200).json({ message: "Event deleted successfully" });
   } catch (error) {

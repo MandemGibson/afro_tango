@@ -43,3 +43,16 @@ export type Event = {
   eventImage: string;
   creatorId: string;
 };
+
+export type Business = {
+  id?: string;
+  name: string;
+  category: string;
+  address: string;
+  email: string;
+  mapLink: string;
+  whatsappNumber: string;
+  phoneNumber: string;
+  businessImage: string;
+  ownerId: string;
+};

@@ -33,6 +33,8 @@ export const createAdHandler = async (
     };
 
     const newAd = await createAd(adData);
+    if (!newAd) return res.status(500).json({ message: "Failed to create ad" });
+
     res.status(201).json({ message: "Ad created successfully", data: newAd });
   } catch (error) {
     next(error);
@@ -64,7 +66,7 @@ export const getAdByIdHandler = async (
     const ad = await getAdById(id);
 
     if (!ad) return res.status(404).json({ message: "Ad not found" });
-    if(ad.isBlocked)
+    if (ad.isBlocked)
       return res.status(404).json({ message: "This ad is blocked" });
 
     res.status(200).json(ad);
@@ -83,6 +85,8 @@ export const updateAdHandler = async (
     const adData = req.body;
     const updatedAd = await updateAd(id, adData);
 
+    if (!updatedAd) return res.status(404).json({ message: "Ad not found" });
+
     res
       .status(200)
       .json({ message: "Ad updated successfully", data: updatedAd });
@@ -98,7 +102,9 @@ export const deleteAdHandler = async (
 ): Promise<any> => {
   try {
     const { id } = req.params;
-    await deleteAd(id);
+    const deletedAd = await deleteAd(id);
+
+    if (!deletedAd) return res.status(404).json({ message: "Ad not found" });
 
     res.status(200).json({ message: "Ad deleted successfully" });
   } catch (error) {

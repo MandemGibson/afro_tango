@@ -64,7 +64,7 @@ GET http://localhost:5000/api/v1/users/cm3zucq8g000058hwrlwknpxy
 
 ###
 //Update user
-PUT http://localhost:5000/api/v1/users/cm3zuja0p0000868p8tmn7f4n
+PUT http://localhost:5000/api/v1/users/cm3zuja0p0000868p8tmn7f4
 Content-Type: application/json
 
 {
@@ -161,4 +161,43 @@ Content-Type: application/json
 
 ###
 //Delete event
-DELETE http://localhost:5000/api/v1/events/cm400rp24000111z0zqhrlyqx
+DELETE http://localhost:5000/api/v1/events/cm40fgjaq0001mz4jxq3ga212
+
+
+###
+//Create business
+POST http://localhost:5000/api/v1/businesses
+Content-Type: application/json
+
+{
+    "name": "Jenny's Parlor",
+    "description": "This is a test busines",
+    "category": "Fashion",
+    "address": "Sekondi, Beach Road",
+    "email": "jennyparlor@test.io",
+    "mapLink": "google.maps/sekondi",
+    "whatsappNumber": "+233 24 1234567",
+    "phoneNumber": "+233 24 1234567",
+    "businessImage": "image.jpg"
+}
+
+###
+//Get all business
+GET http://localhost:5000/api/v1/businesses
+
+###
+//Get one business
+GET http://localhost:5000/api/v1/businesses/cm40k16bp0001k7r0wqbvf4p5
+
+###
+//Update business
+PUT http://localhost:5000/api/v1/businesses/cm40k16bp0001k7r0wqbvf4p5
+Content-Type: application/json
+
+{
+    "mapLink": "google.maps/sekondi-beachroad"
+}
+
+###
+//Delete business
+DELETE http://localhost:5000/api/v1/businesses/cm40k16bp0001k7r0wqbvf4p5
